@@ -7,19 +7,23 @@ const gzip = createGzip();
 
 const compress = async (files) => {
     const [sourceFile, destinationDir] = files.split(' ');
+    try {
+        const fileName = basename(sourceFile);
+        const destinationPath = join(destinationDir, fileName);
 
-    const fileName = basename(sourceFile);
-    const destinationPath = join(destinationDir, fileName);
+        const source = fs.createReadStream(fileName);
+        const destination = fs.createWriteStream(destinationPath);
 
-    const source = fs.createReadStream(fileName);
-    const destination = fs.createWriteStream(destinationPath);
+        stream.pipeline(source, gzip, destination, (err) => {
+            if (err) {
+                console.error('Zip operation failed', err);
+                process.exitCode = 1;
+            }
+        });
+    } catch (err) {
+        console.error('An error occurred:', err);
+    }
 
-    stream.pipeline(source, gzip, destination, (err) => {
-        if (err) {
-            console.error('Zip operation failed', err);
-            process.exitCode = 1;
-        }
-    });
 };
 
 const decompress = async (files) => {

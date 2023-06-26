@@ -12,12 +12,12 @@ const commandsHandler = {
   add: async (file) => await create(file),
   cp: async (files)=> await copy(files),
   mv: async (files)=> await move(files),
-  rn: async (files)=> rename(files),
-  rm: async (file) => remove(file),
+  rn: async (files)=> await rename(files),
+  rm: async (file) => await remove(file),
     hash: async (file) => calculateHash(file),
   os: (command) => osHandler(command),
-  compress: (args) => compress(args),
-  decompress: (args) => decompress(args),
+  compress: async (args) => await compress(args),
+  decompress: async (args) => await decompress(args),
 }
 
 const commands = Object.keys(commandsHandler);
